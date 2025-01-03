@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 
 const Page = () => {
@@ -80,7 +79,7 @@ const Page = () => {
       }, 50); // Reduced from 100ms to 50ms for faster speed
 
       return () => clearInterval(fallInterval);
-    },);
+    }, [ ]);
 
     const isCellActive = (rowIndex, colIndex) => {
       if (activeColumns.has(colIndex)) {
@@ -92,7 +91,12 @@ const Page = () => {
 
     const getCellColor = (rowIndex, colIndex) => {
       if (isCellActive(rowIndex, colIndex)) {
-        return columnColors[colIndex] || 'bg-black';
+        const color = columnColors[colIndex] || 'bg-black';
+        
+        // Reverse opacity based on row index: top = low opacity, bottom = high opacity
+        const opacity = 1 - (rowIndex / rows); // Lower opacity for higher rows
+        
+        return `${color} opacity-${Math.floor(opacity * 100)}`; // Set the opacity class
       }
       return 'bg-black';
     };
